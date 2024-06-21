@@ -1,0 +1,26 @@
+name: main-workflow
+on: 
+  pull_request:
+    branches:
+      - main
+jobs:
+  check-application:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v4.1.7
+      # i need action to build the dotnet app and also another to run tests
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.0.x' # Specify the version of .NET you are using
+      
+      - name: Restore dependencies
+        run: dotnet restore          
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+      
